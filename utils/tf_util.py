@@ -7,6 +7,8 @@ Date: November 2016
 import numpy as np
 import tensorflow as tf
 
+# tf.compat.v1.disable_eager_execution()
+
 def _variable_on_cpu(name, shape, initializer, use_fp16=False):
   """Helper to create a Variable stored on CPU memory.
   Args:
@@ -18,7 +20,7 @@ def _variable_on_cpu(name, shape, initializer, use_fp16=False):
   """
   with tf.device('/cpu:0'):
     dtype = tf.float16 if use_fp16 else tf.float32
-    var = tf.get_variable(name, shape, initializer=initializer, dtype=dtype)
+    var = tf.compat.v1.get_variable(name, shape, initializer=initializer, dtype=dtype)
   return var
 
 def _variable_with_weight_decay(name, shape, stddev, wd, use_xavier=True):
@@ -39,13 +41,13 @@ def _variable_with_weight_decay(name, shape, stddev, wd, use_xavier=True):
     Variable Tensor
   """
   if use_xavier:
-    initializer = tf.contrib.layers.xavier_initializer()
+    initializer = tf.keras.initializers.GlorotUniform()
   else:
     initializer = tf.truncated_normal_initializer(stddev=stddev)
   var = _variable_on_cpu(name, shape, initializer)
   if wd is not None:
     weight_decay = tf.multiply(tf.nn.l2_loss(var), wd, name='weight_loss')
-    tf.add_to_collection('losses', weight_decay)
+    tf.compat.v1.add_to_collection('losses', weight_decay)
   return var
 
 
@@ -106,9 +108,6 @@ def conv1d(inputs,
       outputs = activation_fn(outputs)
     return outputs
 
-
-
-
 def conv2d(inputs,
            num_output_channels,
            kernel_size,
@@ -142,9 +141,9 @@ def conv2d(inputs,
   Returns:
     Variable tensor
   """
-  with tf.variable_scope(scope) as sc:
+  with tf.compat.v1.variable_scope(scope) as sc:
       kernel_h, kernel_w = kernel_size
-      num_in_channels = inputs.get_shape()[-1].value
+      num_in_channels = inputs.shape[-1]
       kernel_shape = [kernel_h, kernel_w,
                       num_in_channels, num_output_channels]
       kernel = _variable_with_weight_decay('weights',
@@ -327,8 +326,8 @@ def fully_connected(inputs,
   Returns:
     Variable tensor of size B x num_outputs.
   """
-  with tf.variable_scope(scope) as sc:
-    num_input_units = inputs.get_shape()[-1].value
+  with tf.compat.v1.variable_scope(scope) as sc:
+    num_input_units = inputs.shape[-1]
     weights = _variable_with_weight_decay('weights',
                                           shape=[num_input_units, num_outputs],
                                           use_xavier=use_xavier,
@@ -362,7 +361,7 @@ def max_pool2d(inputs,
   Returns:
     Variable tensor
   """
-  with tf.variable_scope(scope) as sc:
+  with tf.compat.v1.variable_scope(scope) as sc:
     kernel_h, kernel_w = kernel_size
     stride_h, stride_w = stride
     outputs = tf.nn.max_pool(inputs,
@@ -465,8 +464,8 @@ def batch_norm_template(inputs, is_training, scope, moments_dims, bn_decay):
   Return:
       normed:        batch-normalized maps
   """
-  with tf.variable_scope(scope) as sc:
-    num_channels = inputs.get_shape()[-1].value
+  with tf.compat.v1.variable_scope(scope) as sc:
+    num_channels = inputs.shape[-1]
     beta = tf.Variable(tf.constant(0.0, shape=[num_channels]),
                        name='beta', trainable=True)
     gamma = tf.Variable(tf.constant(1.0, shape=[num_channels]),
@@ -568,7 +567,7 @@ def dropout(inputs,
   Returns:
     tensor variable
   """
-  with tf.variable_scope(scope) as sc:
+  with tf.compat.v1.variable_scope(scope) as sc:
     outputs = tf.cond(is_training,
                       lambda: tf.nn.dropout(inputs, keep_prob, noise_shape),
                       lambda: inputs)

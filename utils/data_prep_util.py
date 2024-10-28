@@ -7,7 +7,6 @@ import numpy as np
 import h5py
 
 SAMPLING_BIN = os.path.join(BASE_DIR, 'third_party/mesh_sampling/build/pcsample')
-
 SAMPLING_POINT_NUM = 2048
 SAMPLING_LEAF_SIZE = 0.005
 
