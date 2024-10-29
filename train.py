@@ -267,7 +267,6 @@ def eval_one_epoch(sess, ops, test_writer):
             loss_sum += (loss_val*BATCH_SIZE)
             for i in range(start_idx, end_idx):
                 l = current_label[i]
-                print("l", l)
                 total_seen_class[l] += 1
                 total_correct_class[l] += (pred_val[i-start_idx] == l)
             
