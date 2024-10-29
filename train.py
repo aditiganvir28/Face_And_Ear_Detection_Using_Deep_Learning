@@ -52,7 +52,7 @@ LOG_FOUT = open(os.path.join(LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
 
 MAX_NUM_POINT = 2048
-NUM_CLASSES = 313
+NUM_CLASSES = 170
 
 BN_INIT_DECAY = 0.5
 BN_DECAY_DECAY_RATE = 0.5
@@ -63,9 +63,9 @@ HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
 TRAIN_FILES = provider.getDataFiles( \
-    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/train_files.txt'))
+    os.path.join(BASE_DIR, '/kaggle/input/3d-face-and-ear-data/train_files.txt'))
 TEST_FILES = provider.getDataFiles(\
-    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/test_files.txt'))
+    os.path.join(BASE_DIR, '/kaggle/input/3d-face-and-ear-data/test_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
@@ -267,6 +267,7 @@ def eval_one_epoch(sess, ops, test_writer):
             loss_sum += (loss_val*BATCH_SIZE)
             for i in range(start_idx, end_idx):
                 l = current_label[i]
+                print("l", l)
                 total_seen_class[l] += 1
                 total_correct_class[l] += (pred_val[i-start_idx] == l)
             
