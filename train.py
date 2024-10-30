@@ -63,9 +63,9 @@ HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
 TRAIN_FILES = provider.getDataFiles( \
-    os.path.join(BASE_DIR, '/kaggle/input/3d-face-and-ear-data/train_files.txt'))
+    os.path.join(BASE_DIR, '/content/train_files.txt'))
 TEST_FILES = provider.getDataFiles(\
-    os.path.join(BASE_DIR, '/kaggle/input/3d-face-and-ear-data/test_files.txt'))
+    os.path.join(BASE_DIR, '/content/test_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
