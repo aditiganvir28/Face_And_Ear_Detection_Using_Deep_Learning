@@ -70,7 +70,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     net_transformed = tf.expand_dims(net_transformed, [2])
 
     # Additional Convolution Layers with new architecture
-    net = tf_util.conv2d(net_transformed, 256, [1, 1], padding='VALID', stride=[1, 1],
+    net = tf_util.conv2d(net_transformed, 128, [1, 1], padding='VALID', stride=[1, 1],
                  bn=True, is_training=is_training, scope='conv3', bn_decay=bn_decay)
     net = tf_util.conv2d(net_transformed, 256, [1, 1], padding='VALID', stride=[1, 1],
                  bn=True, is_training=is_training, scope='conv4', bn_decay=bn_decay)
@@ -85,9 +85,9 @@ def get_model(point_cloud, is_training, bn_decay=None):
 
     # Fully Connected Layers
     net = tf_util.fully_connected(net, 512, bn=True, is_training=is_training, scope='fc1', bn_decay=bn_decay)
-    net = tf_util.dropout(net, keep_prob=0.5, is_training=is_training, scope='dp1')
+    net = tf_util.dropout(net, keep_prob=0.7, is_training=is_training, scope='dp1')
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training, scope='fc2', bn_decay=bn_decay)
-    net = tf_util.dropout(net, keep_prob=0.5, is_training=is_training, scope='dp2')
+    net = tf_util.dropout(net, keep_prob=0.7, is_training=is_training, scope='dp2')
     net = tf_util.fully_connected(net, 20, activation_fn=None, scope='fc3')  # Output adjusted for 40 classes
 
     return net, end_points
