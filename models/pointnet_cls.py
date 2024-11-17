@@ -82,7 +82,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
 
     # Symmetric function: max pooling
     net = tf_util.max_pool2d(net, [num_point, 1], padding='VALID', scope='maxpool')
-    net = tf_util.max_pool2d(net, [num_point, 1], padding='VALID', scope='maxpool')
+    # net = tf_util.max_pool2d(net, [num_point, 1], padding='VALID', scope='maxpool')
     net = tf.reshape(net, [batch_size, -1])
 
     # Fully Connected Layers
