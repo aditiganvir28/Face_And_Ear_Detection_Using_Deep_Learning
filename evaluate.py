@@ -24,7 +24,7 @@ parser.add_argument('--batch_size', type=int, default=4, help='Batch Size during
 parser.add_argument('--num_point', type=int, default=1024, help='Point Number [256/512/1024/2048] [default: 1024]')
 parser.add_argument('--model_path', default='log/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 parser.add_argument('--dump_dir', default='dump', help='dump folder path [dump]')
-parser.add_argument('--visu', action='store_true', help='Whether to dump image for error case [default: False]')
+parser.add_argument('--visu', default='True', action='store_true', help='Whether to dump image for error case [default: False]')
 FLAGS = parser.parse_args()
 
 
@@ -38,17 +38,17 @@ if not os.path.exists(DUMP_DIR): os.mkdir(DUMP_DIR)
 LOG_FOUT = open(os.path.join(DUMP_DIR, 'log_evaluate.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
 
-NUM_CLASSES = 40
+NUM_CLASSES = 20
 SHAPE_NAMES = [line.rstrip() for line in \
-    open(os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/shape_names.txt'))] 
+    open(os.path.join(BASE_DIR, 'data/shape_names.txt'))] 
 
 HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
 TRAIN_FILES = provider.getDataFiles( \
-    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/train_files.txt'))
+    os.path.join(BASE_DIR, 'data/train_files.txt'))
 TEST_FILES = provider.getDataFiles(\
-    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/test_files.txt'))
+    os.path.join(BASE_DIR, 'data/test_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
@@ -167,9 +167,9 @@ def eval_one_epoch(sess, ops, num_votes=1, topk=1):
                 
     log_string('eval mean loss: %f' % (loss_sum / float(total_seen)))
     log_string('eval accuracy: %f' % (total_correct / float(total_seen)))
-    log_string('eval avg class acc: %f' % (np.mean(np.array(total_correct_class)/np.array(total_seen_class,dtype=np.float))))
+    log_string('eval avg class acc: %f' % (np.mean(np.array(total_correct_class)/np.array(total_seen_class,dtype=float))))
     
-    class_accuracies = np.array(total_correct_class)/np.array(total_seen_class,dtype=np.float)
+    class_accuracies = np.array(total_correct_class)/np.array(total_seen_class,dtype=float)
     for i, name in enumerate(SHAPE_NAMES):
         log_string('%10s:\t%0.3f' % (name, class_accuracies[i]))
     

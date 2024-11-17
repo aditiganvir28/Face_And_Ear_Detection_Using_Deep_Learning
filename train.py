@@ -29,9 +29,10 @@ parser.add_argument('--momentum', type=float, default=0.9, help='Initial learnin
 parser.add_argument('--optimizer', default='adam', help='adam or momentum [default: adam]')
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 200000]')
 parser.add_argument('--decay_rate', type=float, default=0.7, help='Decay rate for lr decay [default: 0.8]')
+parser.add_argument('--model_path', default='log/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 FLAGS = parser.parse_args()
 
-
+MODEL_PATH = FLAGS.model_path
 BATCH_SIZE = FLAGS.batch_size
 NUM_POINT = FLAGS.num_point
 MAX_EPOCH = FLAGS.max_epoch
@@ -52,7 +53,7 @@ LOG_FOUT = open(os.path.join(LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
 
 MAX_NUM_POINT = 2048
-NUM_CLASSES = 171
+NUM_CLASSES = 20
 
 BN_INIT_DECAY = 0.5
 BN_DECAY_DECAY_RATE = 0.5
@@ -63,9 +64,9 @@ HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
 TRAIN_FILES = provider.getDataFiles( \
-    os.path.join(BASE_DIR, '/content/train_files.txt'))
+    os.path.join(BASE_DIR, 'data/train_files.txt'))
 TEST_FILES = provider.getDataFiles(\
-    os.path.join(BASE_DIR, '/content/test_files.txt'))
+    os.path.join(BASE_DIR, 'data/validation_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
@@ -134,6 +135,10 @@ def train():
         config.log_device_placement = False
         sess = tf.compat.v1.Session(config=config)
 
+        # Restore variables from disk.
+        # saver.restore(sess, MODEL_PATH)
+        # log_string("Model restored.")
+
         # Add summary writers
         train_writer = tf.summary.create_file_writer(os.path.join(LOG_DIR, 'train'))
         test_writer = tf.summary.create_file_writer(os.path.join(LOG_DIR, 'test'))
@@ -152,6 +157,8 @@ def train():
         #sess.run(init)
         sess.run(init, {is_training_pl: True})
 
+        best_accuracy = 0.0
+
         ops = {'pointclouds_pl': pointclouds_pl,
                'labels_pl': labels_pl,
                'is_training_pl': is_training_pl,
@@ -168,12 +175,14 @@ def train():
             sys.stdout.flush()
              
             train_one_epoch(sess, ops, train_writer)
-            eval_one_epoch(sess, ops, test_writer)
+            eval_accuracy = eval_one_epoch(sess, ops, test_writer)
             
             # Save the variables to disk.
-            if epoch % 10 == 0:
+            if eval_accuracy > best_accuracy:
+                best_accuracy = eval_accuracy
                 save_path = saver.save(sess, os.path.join(LOG_DIR, "model.ckpt"))
                 log_string("Model saved in file: %s" % save_path)
+
 
 # @tf.function
 def train_one_epoch(sess, ops, train_writer):
@@ -247,7 +256,6 @@ def eval_one_epoch(sess, ops, test_writer):
         current_data, current_label = provider.loadDataFile(TEST_FILES[fn])
         current_data = current_data[:,0:NUM_POINT,:]
         current_label = np.squeeze(current_label)
-        
         file_size = current_data.shape[0]
         num_batches = file_size // BATCH_SIZE
         
@@ -269,11 +277,11 @@ def eval_one_epoch(sess, ops, test_writer):
                 l = current_label[i]
                 total_seen_class[l] += 1
                 total_correct_class[l] += (pred_val[i-start_idx] == l)
-            
+    eval_accuracy = total_correct / float(total_seen)
     log_string('eval mean loss: %f' % (loss_sum / float(total_seen)))
     log_string('eval accuracy: %f'% (total_correct / float(total_seen)))
     log_string('eval avg class acc: %f' % (np.mean(np.array(total_correct_class)/np.array(total_seen_class,dtype=float))))
-         
+    return eval_accuracy
 
 
 if __name__ == "__main__":
