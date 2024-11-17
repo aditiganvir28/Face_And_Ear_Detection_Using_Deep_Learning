@@ -49,6 +49,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     end_points = {}
 
     # Input Transformation
+    # Input Transformation
     with tf.compat.v1.variable_scope('transform_net1') as sc:
         transform = input_transform_net(point_cloud, is_training, bn_decay, K=3)
     point_cloud_transformed = tf.matmul(point_cloud, transform)
@@ -80,6 +81,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
                  bn=True, is_training=is_training, scope='conv6', bn_decay=bn_decay)
 
     # Symmetric function: max pooling
+    net = tf_util.max_pool2d(net, [num_point, 1], padding='VALID', scope='maxpool')
     net = tf_util.max_pool2d(net, [num_point, 1], padding='VALID', scope='maxpool')
     net = tf.reshape(net, [batch_size, -1])
 
