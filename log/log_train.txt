@@ -279,3 +279,8 @@ mean loss: 2.204015
 accuracy: 0.255208
 ----0-----
 ----1-----
+eval mean loss: 2.613167
+eval accuracy: 0.256944
+eval avg class acc: 0.253616
+**** EPOCH 013 ****
+----0-----
