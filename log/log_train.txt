@@ -169,3 +169,113 @@ accuracy: 0.171875
 mean loss: 2.701137
 accuracy: 0.148438
 ----0-----
+----1-----
+eval mean loss: 2.382411
+eval accuracy: 0.210069
+eval avg class acc: 0.207931
+Model saved in file: log\model.ckpt
+**** EPOCH 008 ****
+----0-----
+mean loss: 2.570558
+accuracy: 0.190104
+----1-----
+mean loss: 2.618637
+accuracy: 0.166667
+----2-----
+mean loss: 2.594172
+accuracy: 0.171875
+----3-----
+mean loss: 2.654622
+accuracy: 0.135417
+----4-----
+mean loss: 2.472478
+accuracy: 0.226562
+----0-----
+----1-----
+eval mean loss: 2.419395
+eval accuracy: 0.261285
+eval avg class acc: 0.258498
+Model saved in file: log\model.ckpt
+**** EPOCH 009 ****
+----0-----
+mean loss: 2.379338
+accuracy: 0.234375
+----1-----
+mean loss: 2.438105
+accuracy: 0.190104
+----2-----
+mean loss: 2.602826
+accuracy: 0.190104
+----3-----
+mean loss: 2.585786
+accuracy: 0.190104
+----4-----
+mean loss: 2.483845
+accuracy: 0.197917
+----0-----
+----1-----
+eval mean loss: 2.239863
+eval accuracy: 0.275174
+eval avg class acc: 0.272660
+Model saved in file: log\model.ckpt
+**** EPOCH 010 ****
+----0-----
+mean loss: 2.429337
+accuracy: 0.197917
+----1-----
+mean loss: 2.499495
+accuracy: 0.184896
+----2-----
+mean loss: 2.385421
+accuracy: 0.195312
+----3-----
+mean loss: 2.334537
+accuracy: 0.236979
+----4-----
+mean loss: 2.394983
+accuracy: 0.179688
+----0-----
+----1-----
+eval mean loss: 2.158395
+eval accuracy: 0.283854
+eval avg class acc: 0.281249
+Model saved in file: log\model.ckpt
+**** EPOCH 011 ****
+----0-----
+mean loss: 2.332684
+accuracy: 0.195312
+----1-----
+mean loss: 2.326003
+accuracy: 0.226562
+----2-----
+mean loss: 2.345312
+accuracy: 0.226562
+----3-----
+mean loss: 2.384644
+accuracy: 0.208333
+----4-----
+mean loss: 2.378747
+accuracy: 0.216146
+----0-----
+----1-----
+eval mean loss: 2.172193
+eval accuracy: 0.282118
+eval avg class acc: 0.279434
+**** EPOCH 012 ****
+----0-----
+mean loss: 2.438852
+accuracy: 0.210938
+----1-----
+mean loss: 2.380153
+accuracy: 0.239583
+----2-----
+mean loss: 2.427341
+accuracy: 0.187500
+----3-----
+mean loss: 2.233436
+accuracy: 0.278646
+----4-----
+mean loss: 2.204015
+accuracy: 0.255208
+----0-----
+----1-----
