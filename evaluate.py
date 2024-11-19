@@ -38,7 +38,7 @@ if not os.path.exists(DUMP_DIR): os.mkdir(DUMP_DIR)
 LOG_FOUT = open(os.path.join(DUMP_DIR, 'log_evaluate.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
 
-NUM_CLASSES = 40
+NUM_CLASSES = 170
 SHAPE_NAMES = [line.rstrip() for line in \
     open(os.path.join(BASE_DIR, 'data/shape_names.txt'))] 
 
@@ -46,9 +46,9 @@ HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
 TRAIN_FILES = provider.getDataFiles( \
-    os.path.join(BASE_DIR, 'data/train_files.txt'))
+    os.path.join(BASE_DIR, '/kaggle/input/faed-dataset/train_files.txt'))
 TEST_FILES = provider.getDataFiles(\
-    os.path.join(BASE_DIR, 'data/test_files.txt'))
+    os.path.join(BASE_DIR, '/kaggle/input/faed-dataset/test_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')
