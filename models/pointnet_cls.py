@@ -90,7 +90,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     net = tf_util.dropout(net, keep_prob=0.7, is_training=is_training, scope='dp1')
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training, scope='fc2', bn_decay=bn_decay)
     net = tf_util.dropout(net, keep_prob=0.7, is_training=is_training, scope='dp2')
-    net = tf_util.fully_connected(net, 20, activation_fn=None, scope='fc3')  # Output adjusted for 40 classes
+    net = tf_util.fully_connected(net, 170, activation_fn=None, scope='fc3')  # Output adjusted for 40 classes
 
     return net, end_points
 
